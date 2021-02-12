@@ -7,7 +7,7 @@ public class AddressBookMain {
 	private int pin_code;
 	private String phone_number;
 	private String email;
-	
+
 	public AddressBookMain(String first_name, String last_name, int House_no, String city, String state, int pin_code, String phone_number, String email) {
 		this.first_name = first_name;
 		this.last_name = last_name;
@@ -18,7 +18,7 @@ public class AddressBookMain {
 		this.phone_number = phone_number;
 		this.email = email;
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println("WELCOME to Address Book Program");
 		AddressBookMain entry = new AddressBookMain("Amit", "Maharana", 77, "Jamshedpur", "Jharkhand", 831004, "8210029078", "ak657harley@gmail.com");
