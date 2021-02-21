@@ -1,140 +1,92 @@
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class AddressBookMain {
-    private final String firstName;
-    private final String lastName;
-    private final String address;
-    private final String city;
-    private final String state;
-    private final int zip;
-    private final String phone;
-    private final String email;
+    static Scanner input = new Scanner(System.in);
+    static String[] info;
+    static String name;
+    static ArrayList<String> namelist = new ArrayList<>();
+    static HashMap<String, String[]> contacts = new HashMap<>();
 
-    public AddressBookMain(String firstName, String lastName, String address, String city,
-                                 String state, int zip, String phone, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.zip = zip;
-        this.phone = phone;
-        this.email = email;
+    public static String[] Person() {
+        String[] contact = new String[8];
+        System.out.println("Enter your details accordingly \n1. First Name\n2. Last Name\n"
+                + "3. House number\n4. City\n5. State\n6. Pin Code\n" +
+                    "7.  Phone number\n8. e-mail");
+        for (int index = 0; index < contact.length; index++)
+            contact[index] = input.next();
+        contacts.put(name, contact);
+        return contact;
     }
 
-    public String toString() {
-        return "\tFirst Name: " + firstName + "\n\tLast Name: " + lastName + "\n\tAddress: " +
-                address + "\n\tCity: " + city + "\n\tState: " + state + "\n\tZIP: " + zip +
-                "\n\tPhone: " + phone + "\n\temail: " + email;
+    public static String[] edit(String[] contact) {
+        System.out.println("Press the respective number you want to edit\n" +
+                "1  First Name\n2 Last Name\n3 House no.\n4 City\n5 State\n" +
+                "6 Pin Code\n7 phone number\n8 email");
+        int choose = input.nextInt();
+        if (choose >= 1 && choose <= 8) {
+            choose--;
+            System.out.println("Enter the new details you choosed to edit");
+            contact[choose] = input.next();
+        }
+        return contact;
     }
-
+    public static void option() {
+        boolean bool = true;
+        while (bool) {
+            System.out.println("Type the following numbers if you want to perform the corresponding action");
+            System.out.println("1. EDIT\n2. DELETE\n3. NEW CONTACT\nAnyNumber. EXIT");
+            int action = input.nextInt();
+            switch (action) {
+                case 1:
+                    System.out.println("Enter your unique name");
+                    name = input.next();
+                    if (namelist.contains(name)) {
+                        info = contacts.get(name);
+                        info = edit(info);
+                    }
+                    for (int index = 0; index < info.length; index++)
+                        System.out.println(info[index]);
+                    break;
+                case 2:
+                    System.out.println("Enter your unique name");
+                    name = input.next();
+                    if (namelist.contains(name)) {
+                        contacts.remove(name);
+                        namelist.remove(name);
+                    }
+                    break;
+                case 3:
+                    uniqueName();
+                    info = Person();
+                    for (int index = 0; index < info.length; index++)
+                        System.out.println(info[index]);
+                    break;
+                default:
+                    bool = false;
+            }
+        }
+    }
+    public static String uniqueName() {
+        boolean check = true;
+        while(check == true) {
+            System.out.println("Enter a name");
+            name = input.next();
+            if (namelist.contains(name))
+                System.out.println("Name already exist.Please try again with another name");
+            else {
+                namelist.add(name);
+                check = false;
+            }
+        }
+        return name;
+    }
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        // Array Declaration
-        AddressBookMain[] content = new AddressBookMain[1];
-        //Instance variables
-        int entries, zip;
-        String first, last, address, city, state, phone, email, choice;
-
-        //Asking User for 1 or more Entries
-        System.out.println("How many new Entries do you require in AddressBook: ");
-        entries = sc.nextInt();
-        // Initialising Array
-        if ( entries > 0)
-            content = new AddressBookMain[entries];
-        else {
-            System.out.println("Must Create atleast 1 Entry");
-            System.exit(0);
-        }
-
-        System.out.println("\t*****Address Book*****\t");
-        for ( int i = 0 ; i < entries ; i++ ) {
-            System.out.println("Entry: "+(i+1));
-            System.out.print("First name? ");
-            first = sc.next();
-            System.out.print("Last name? ");
-            last = sc.next();
-            System.out.print("Address? ");
-            address = sc.next();
-            System.out.print("City? ");
-            city = sc.next();
-            System.out.print("State? ");
-            state = sc.next();
-            System.out.print("ZIP? ");
-            zip = sc.nextInt();
-            System.out.print("Phone? ");
-            phone = sc.next();
-            System.out.print("Email? ");
-            email = sc.next();
-            content[i] = new AddressBookMain(first, last, address, city, state, zip, phone, email);
-        }
-
-        for ( int i = 0 ; i < entries ; i++ ) {
-            System.out.println("\t*****Address Book*****\t");
-            System.out.println("Entry: "+(i+1));
-            System.out.println(content[i]);
-        }
-
-        System.out.println("Do you want to edit any Entries u just created? (y/n)");
-        choice = sc.next();
-        if (choice.equals("Y") || choice.equals("y")) {
-            String name;
-            System.out.println("Please enter the first name of Person u want to edit: ");
-            name = sc.next();
-            for (int i = 0; i < entries; i++) {
-                if (Objects.equals(content[i].firstName, name)) {
-                    System.out.print("First name? ");
-                    first = sc.next();
-                    System.out.print("Last name? ");
-                    last = sc.next();
-                    System.out.print("Address? ");
-                    address = sc.next();
-                    System.out.print("City? ");
-                    city = sc.next();
-                    System.out.print("State? ");
-                    state = sc.next();
-                    System.out.print("ZIP? ");
-                    zip = sc.nextInt();
-                    System.out.print("Phone? ");
-                    phone = sc.next();
-                    System.out.print("Email? ");
-                    email = sc.next();
-                    content[i] = new AddressBookMain(first, last, address, city, state, zip, phone, email);
-                } else
-                    System.out.println("Person Not found at Entry " + (i + 1) + " with Person FirstName: " + name);
-            }
-            for (int i = 0; i < entries; i++) {
-                System.out.println("\t*****Address Book*****\t");
-                System.out.println("(Edited)Entry: " + (i + 1));
-                System.out.println(content[i]);
-            }
-        }
-        else
-            System.out.println("Thank You!!");
-
-        System.out.println("Do you want to delete any Entries u just created? (y/n)");
-        choice = sc.next();
-        if (choice.equals("Y") || choice.equals("y")) {
-            AddressBookMain[] removedArray = new AddressBookMain[content.length-1];
-            String name;
-            System.out.println("Please enter the first name of Person u want to edit: ");
-            name = sc.next();
-            for (int i = 0, k=0; i < entries; i++) {
-                if (Objects.equals(content[i].firstName, name)) {
-                    continue;
-                }
-                removedArray[k++] = content[i];
-            }
-            entries = entries-1;
-            System.arraycopy(removedArray, 0, content, 0, entries);
-            for (int i = 0; i < entries; i++) {
-                System.out.println("\t*****Address Book*****\t");
-                System.out.println("Entry: " + (i + 1));
-                System.out.println(content[i]);
-            }
-        }
-        else
-            System.out.println("******Thank You******");
+        System.out.println("WELCOME to Address Book Program");
+        name = uniqueName();
+        info = Person();
+        option();
+        System.out.println("******THANK YOU******");
     }
 }
