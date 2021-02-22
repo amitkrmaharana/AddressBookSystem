@@ -7,22 +7,44 @@ public class AddressBookMain {
     static String[] info;
     static String name, addressBookName;
     static ArrayList<String> namelist = new ArrayList<>();
+    static ArrayList<String> firstNameList = new ArrayList<>();
     static HashMap<String, HashMap> addressbooks = new HashMap<>();
     static HashMap<String, String[]> contacts = new HashMap<>();
-
-    public static String[] Person() {
-        String[] contact = new String[8];
+    static String[] contact = new String[8];
+    static String firstName;
+    // Taking a details input in an array
+    public static String[] contactDetailsInput() {
         System.out.println("Enter your details accordingly \n1. First Name\n2. Last Name\n"
                 + "3. House number\n4. City\n5. State\n6. Pin Code\n" +
                     "7.  Phone number\n8. e-mail");
-        for (int index = 0; index < contact.length; index++)
-            contact[index] = input.next();
+        for (int index = 0; index < contact.length; index++) {
+            System.out.print((index + 1)  + ".");
+            if (index == 0) {
+                contact = firstNameDuplicacyCheck();
+            } else
+                contact[index] = input.next();
+        }
         contacts.put(name, contact);
         addressbooks.put(addressBookName, contacts);
         return contact;
     }
-
-    public static String[] edit(String[] contact) {
+    // To check if First name is already in some other conatct name
+    public static String[] firstNameDuplicacyCheck() {
+        boolean check = true;
+        while(check) {
+            firstName = input.next();
+            if (firstNameList.contains(firstName))
+                System.out.println("Name already exist,Try another name");
+            else {
+                firstNameList.add(firstName);
+                contact[0] = firstName;
+                check = false;
+            }
+        }
+        return contact;
+    }
+    // To update the contact details if enquired for
+    public static String[] updateContactDetails(String[] contact) {
         System.out.println("Press the respective number you want to edit\n" +
                 "1  First Name\n2 Last Name\n3 House no.\n4 City\n5 State\n" +
                 "6 Pin Code\n7 phone number\n8 email");
@@ -34,7 +56,8 @@ public class AddressBookMain {
         }
         return contact;
     }
-    public static void option() {
+    // To check whether what actions do we need to perform
+    public static void checkActions() {
         boolean bool = true;
         int action;
         while(bool) {
@@ -44,30 +67,28 @@ public class AddressBookMain {
                 contacts = addressbooks.get(name);
                 while (bool) {
                     System.out.println("Type the following numbers if you want to perform the corresponding action");
-                    System.out.println("1. EDIT\n2. DELETE\n3. NEW CONTACT\nAnyNumber. EXIT");
+                    System.out.println("1. EDIT\n2. DELETE\n3. ADD NEW CONTACT\nAnyNumber. EXIT");
                     action = input.nextInt();
                     switch (action) {
                         case 1:
-                            System.out.println("Enter your unique name");
+                            System.out.println("Enter your unique contact name");
                             name = input.next();
                             if (namelist.contains(name)) {
                                 info = contacts.get(name);
-                                info = edit(info);
+                                info = updateContactDetails(info);
                             }
-                            for (int index = 0; index < info.length; index++)
-                                System.out.println(info[index]);
+                            printContactDetails(info);
                             break;
                         case 2:
-                            System.out.println("Enter your unique name");
+                            System.out.println("Enter your  unique contact name");
                             name = input.next();
-                            if (namelist.contains(name)) {
-                                contacts.remove(name);
+                            if (namelist.contains(name))
                                 namelist.remove(name);
-                            }
                             break;
                         case 3:
-                            uniqueName();
-                            info = Person();
+                            System.out.println("Enter a new contact name");
+                            name = addUniqueName();
+                            info = contactDetailsInput();
                             for (int index = 0; index < info.length; index++)
                                 System.out.println(info[index]);
                             break;
@@ -78,11 +99,11 @@ public class AddressBookMain {
                 bool = true;
             }
             else {
-                System.out.println("Press the following: \n1. New Addressbook\n2. Try Again\nAny Number. Exit ");
+                System.out.println("Press the following: \n1. Add New Addressbook\n2. Try Again\nAny Number. Exit ");
                 action = input.nextInt();
                 switch(action) {
                     case 1:
-                        start();
+                        programStart();
                         break;
                     case 2:
                         break;
@@ -92,9 +113,10 @@ public class AddressBookMain {
             }
         }
     }
-    public static String uniqueName() {
+    // To check if the names of the multiple address book and contacts list created does not get repeated.
+    public static String addUniqueName() {
         boolean check = true;
-        while(check == true) {
+        while(check) {
             name = input.next();
             if (namelist.contains(name))
                 System.out.println("Name already exist.Please try again with another name");
@@ -105,17 +127,24 @@ public class AddressBookMain {
         }
         return name;
     }
-    public static void start() {
+    //This takes place at the start of the program or to add a new address book
+    public static void programStart() {
         System.out.println("Enter a name for Address Book");
-        addressBookName = uniqueName();
+        addressBookName = addUniqueName();
         System.out.println("Enter a name for contacts");
-        name = uniqueName();
-        info = Person();
+        name = addUniqueName();
+        info = contactDetailsInput();
+    }
+    // For printing contact details
+    public static void printContactDetails(String[] info) {
+        for (int index = 1; index <= info.length; index++) {
+            System.out.println(index + ". " + info[index]);
+        }
     }
     public static void main(String[] args) {
         System.out.println("WELCOME to Address Book Program");
-        start();
-        option();
+        programStart();
+        checkActions();
         System.out.println("******THANK YOU******");
     }
 }
