@@ -14,6 +14,7 @@ public class AddressBookMain {
     static HashMap<String, String> state = new HashMap<>();
     static String[] contact = new String[8];
     static int index;
+    static int numOfContacts = 0;
     // Taking all details input in an array
     public static String[] contactDetailsInput() {
         System.out.println("Enter your details accordingly \n1. First Name\n2. Last Name\n"
@@ -32,6 +33,7 @@ public class AddressBookMain {
         state.put(contact[0], contact[4]);
         stateCitynameList.add(contact[3]);
         stateCitynameList.add(contact[4]);
+        numOfContacts++;
         return contact;
     }
     // To check if First name is already in some other conatct name
@@ -72,7 +74,7 @@ public class AddressBookMain {
                 contacts = addressbooks.get(name);
                 while (bool) {
                     System.out.println("Type the following numbers if you want to perform the corresponding action");
-                    System.out.println("1. EDIT\n2. DELETE\n3. ADD NEW CONTACT\nAnyNumber. EXIT");
+                    System.out.println("1. EDIT\n2. DELETE\n3. ADD NEW CONTACT\n4. Total Number of Contacts\nAnyNumber. EXIT");
                     action = input.nextInt();
                     switch (action) {
                         case 1:
@@ -97,6 +99,8 @@ public class AddressBookMain {
                             for (int index = 0; index < info.length; index++)
                                 System.out.println(info[index]);
                             break;
+                        case 4:
+                            System.out.println("Total Number of Contacts are " + numOfContacts);
                         default:
                             bool = false;
                     }
@@ -161,7 +165,7 @@ public class AddressBookMain {
                 name = input.next();
                 if (stateCitynameList.contains(name)) {
                     for (Map.Entry<String, String> firstName:city.entrySet()) {
-                        if ( firstName.getValue().equals(name)) 
+                        if ( firstName.getValue().equals(name))
                             System.out.println(firstName.getKey());
                     }
                 }
