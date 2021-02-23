@@ -2,32 +2,40 @@ import java.util.*;
 
 public class AddressBookMain {
     static Scanner input = new Scanner(System.in);
-    static String[] info, personFirstname;
+    static String[] info;
     static String name, addressBookName, firstName;
     static ArrayList<String> namelist = new ArrayList<>();
-    static ArrayList<String> firstNameList = new ArrayList<>();
+    static ArrayList<String> firstNameList  = new ArrayList<>();
+    static ArrayList<String> stateCitynameList = new ArrayList<>();
+    static ArrayList<String>  personNameList = new ArrayList<>();
     static HashMap<String, HashMap> addressbooks = new HashMap<>();
     static HashMap<String, String[]> contacts = new HashMap<>();
+    static HashMap<String, String> city = new HashMap<>();
+    static HashMap<String, String> state = new HashMap<>();
     static String[] contact = new String[8];
     static int index;
-    // Taking a details input in an array
+    // Taking all details input in an array
     public static String[] contactDetailsInput() {
         System.out.println("Enter your details accordingly \n1. First Name\n2. Last Name\n"
                 + "3. House number\n4. City\n5. State\n6. Pin Code\n" +
-                    "7.  Phone number\n8. e-mail");
+                "7.  Phone number\n8. e-mail");
         for (int index = 0; index < contact.length; index++) {
             System.out.print((index + 1)  + ".");
             if (index == 0) {
-                contact = firstNameDuplicacyCheck();
+                firstNameDuplicacyCheck();
             } else
                 contact[index] = input.next();
         }
         contacts.put(name, contact);
         addressbooks.put(addressBookName, contacts);
+        city.put(contact[0], contact[3]);
+        state.put(contact[0], contact[4]);
+        stateCitynameList.add(contact[3]);
+        stateCitynameList.add(contact[4]);
         return contact;
     }
     // To check if First name is already in some other conatct name
-    public static String[] firstNameDuplicacyCheck() {
+    public static void firstNameDuplicacyCheck() {
         boolean check = true;
         while(check) {
             firstName = input.next();
@@ -39,7 +47,6 @@ public class AddressBookMain {
                 check = false;
             }
         }
-        return contact;
     }
     // To update the contact details if enquired for
     public static String[] updateContactDetails(String[] contact) {
@@ -143,26 +150,38 @@ public class AddressBookMain {
             System.out.println(index + ". " + info[index]);
         }
     }
-    // To search person by the name of city or state 
+    // To search person by the name of city or state
     public static void searchPersons() {
-        ArrayList<String> personNameList = new ArrayList<>();
-        System.out.println("Enter the city or state name to search persons in them");
-        name = input.next();;
-        for (Map.Entry getContacts:addressbooks.entrySet()) {
-            contacts = addressbooks.get(getContacts.getKey());
-            for (Map.Entry getInfo:contacts.entrySet()){
-                info = contacts.get(getInfo.getKey());
-                if ( info[3] == name || info[4] == name) {
-                    personNameList.add(info[0]);
+        personNameList = new ArrayList<>();
+        System.out.println("Enter the corresponding number \n1. city\n 2. state\n" +
+                "To search persons in them");
+        switch(input.nextInt()) {
+            case 1:
+                System.out.println("Enter the city name");
+                name = input.next();
+                if (stateCitynameList.contains(name)) {
+                    for (Map.Entry<String, String> firstName:city.entrySet()) {
+                        if ( firstName.getValue().equals(name)) 
+                            System.out.println(firstName.getKey());
+                    }
                 }
-            }
+                else { System.out.println("Invalid Name");}
+                break;
+            case 2:
+                System.out.println("Enter the state name");
+                name = input.next();
+                if (stateCitynameList.contains(name)) {
+                    for (Map.Entry getFirstName:state.entrySet()) {
+                        if (getFirstName.getValue().equals(name))
+                            System.out.println(getFirstName.getKey());
+                    }
+                }
+                else { System.out.println("Invalid Name");}
+                break;
+            default:
+                System.out.println("Invalid Input.Exiting, Try Again");
         }
-        System.out.println("The persons residing in the state or city you asked for are:");
-        Iterator itr=personNameList.iterator();
-        while(itr.hasNext()) {
-            System.out.println(itr.next());
-        }
-     }
+    }
     public static void main(String[] args) {
         System.out.println("WELCOME to Address Book Program");
         programStart();
