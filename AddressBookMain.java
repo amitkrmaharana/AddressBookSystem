@@ -3,16 +3,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class AddressBookMain {
     static String firstName,lastName,address,city,state,zip,phoneNumber,email,name;
-    static int selection;
+    static int selection, count = 0;
     static HashMap<String, HashMap> addressBook = new HashMap<>();
     static HashMap<String, String> contactDetails;
     static HashMap<String, HashMap> contactBook = new HashMap<>();
-    static HashMap<String, String> cityMap = new HashMap<>();
-    static HashMap<String, String> stateMap = new HashMap<>();
+    static HashMap<HashMap, String> cityMap = new HashMap<>();
+    static HashMap<HashMap, String> stateMap = new HashMap<>();
+    static HashMap<HashMap, String> zipMap = new HashMap<>();
     static ArrayList<String> contactnameCheckList = new ArrayList<>();
     static ArrayList<String> addressBookNameCheckList = new ArrayList<>();
     static Scanner sc = new Scanner(System.in);
@@ -43,9 +43,11 @@ public class AddressBookMain {
         System.out.println("Enter your Email");
         email = sc.next();
         contactDetails.put("Email", email);
-        cityMap.put(firstName, city);
-        stateMap.put(firstName, state);
+        cityMap.put(contactDetails, city);
+        stateMap.put(contactDetails, state);
+        zipMap.put(contactDetails,zip);
         contactBook.put(firstName, contactDetails);
+        count++;
         System.out.println("Details you enterd are " + contactDetails);
     }
     public static void editInfo() {
@@ -110,21 +112,20 @@ public class AddressBookMain {
         else
             System.out.println("Invalid First Name");
     }
-    public static void deleteInfo(HashMap<String,HashMap> book,HashMap<String, String> cityMap) {
+    public static void deleteInfo(HashMap<String,HashMap> book) {
         System.out.println("Enter your First Name");
         firstName = sc.next();
         book.entrySet().removeIf(entry -> entry.getKey().equals(firstName));
-        cityMap.entrySet().removeIf(entry -> entry.getKey().equals(firstName));
     }
     public static void checkAction() {
         boolean check = true;
         while(check) {
-            System.out.println("Enter your Address Book unique name or to add new Address Book press any key to enter");
+            System.out.println("Enter your Address Book unique name or to add new Address Book press any key to enter for next actions");
             name = sc.next();
             if (addressBookNameCheckList.contains(name)) {
                 while (check) {
                     System.out.println("Type the number with respect to your choice:\n1. ADD CONTACT\n" +
-                            "2 . EDIT CONTACT\n3. DELETE CONTACT\n4. SORT CONTACTBOOK\n5. EXIT");
+                            "2 . EDIT CONTACT\n3. DELETE CONTACT\n4. SORT CONTACTBOOK by \n5. EXIT");
                     selection = sc.nextInt();
                     switch (selection) {
                         case 1:
@@ -137,7 +138,7 @@ public class AddressBookMain {
                             break;
                         case 3:
                             contactBook = addressBook.get(name);
-                            deleteInfo(contactBook, cityMap);
+                            deleteInfo(contactBook);
                             break;
                         case 4:
                             contactBook = addressBook.get(name);
@@ -153,14 +154,15 @@ public class AddressBookMain {
                 check = true;
             }
             else {
-                System.out.println("Enter the respective numbers for actions provided:\n1. NEW ADDRESS BOOK\n2. SORT PERSON\n3. TOTAL CONTACTS\n4. EXIT ");
+                System.out.println("Enter the respective numbers for actions provided:\n1. NEW ADDRESS BOOK\n2. SORT BY CITY OR STATE" +
+                        "\n3. TOTAL CONTACTS\n4. EXIT ");
                 selection = sc.nextInt();
                 switch(selection) {
                     case 1:
                         addressName();
                         break;
                     case 2:
-                        sortingByCityOrState();
+                        sortingByCityOrStateorZip();
                         break;
                     case 3:
                         System.out.println("Total contacts available are " + cityMap.size());
@@ -179,21 +181,18 @@ public class AddressBookMain {
         name = uniqueNameCheck(addressBookNameCheckList);
         addressBookNameCheckList.add(name);
     }
-    public static void sortingByCityOrState() {
-        System.out.println("Enter the respective number for actio provided: \n1. Sort by City\n2. Sort by State");
+    public static void sortingByCityOrStateorZip() {
+        System.out.println("Enter the respective number for actio provided: \n1. Sort by City\n2. Sort by State\n3. Sort by Zip");
         selection = sc.nextInt();
         switch(selection) {
             case 1:
-                System.out.println("Enter city name");
-                city = sc.next();
-                cityMap.entrySet().stream().filter(entry ->  entry.getValue().equals(city))
-                .forEach(System.out::println);
+                cityMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(System.out::println);
                 break;
             case 2:
-                System.out.println("Enter state name");
-                state = sc.next();
-                stateMap.entrySet().stream().filter(entry -> entry.getValue().equals(state))
-                        .forEach(System.out::println);
+                stateMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(System.out::println);
+                break;
+            case 3:
+                zipMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(System.out::println);
                 break;
             default:
                 System.out.println("Invalid Input");
