@@ -1,10 +1,17 @@
 package addressbook;
 
 
+import com.opencsv.CSVReader;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AddressBookMain {
     static HashMap<String,HashMap> addressBook = new HashMap<>();
@@ -90,7 +97,7 @@ public class AddressBookMain {
         while (check) {
             System.out.println("Choose Options From the Following, Type Corresponding number" +
                     "\n1. Add New Address Book\n2. Existing Address Book\n3. Search Person Details By City or State\n4. Total Number of Contacts" +
-                    "\n5. Sort Contacts\n6. Read data\n7. Write data\n8. Exit");
+                    "\n5. Sort Contacts\n6. Read FileIO data\n7. Write FileIO data\n8. Read CSV File\n9. Write CSV File \n10. Exit");
             switch (consoleReader.nextInt()) {
                 case 1:
                     name = getDetails("New Address Book Name");
@@ -127,6 +134,12 @@ public class AddressBookMain {
                     addressBookFileIOService.printData();
                     break;
                 case 8:
+                    readCSVFile();
+                    break;
+                case 9:
+                    writeCSVFile();
+                    break;
+                case 10:
                     check = false;
                     break;
                 default:
@@ -210,6 +223,35 @@ public class AddressBookMain {
 
     public void readAddressBook() {
         contactsArrayList = (ArrayList<Contacts>) new AddressBookFileIOService().readData();
+    }
+    public void readCSVFile() {
+        try {
+            // Initiating the CSVreader class
+            CSVReader reader = new CSVReader(new FileReader("C:\\Users\\Milan\\Desktop\\Fellowship\\ContactBooks\\src\\main\\resources\\contactDetails.csv"));
+            //Reading contents of CSV file
+            StringBuffer buffer = new StringBuffer();
+            String line[];
+            while ((line = reader.readNext()) != null) {
+                for (int index = 0; index< line.length; index++)
+                    System.out.println(line[index] + "  ");
+                System.out.println("  ");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeCSVFile() {
+        try {
+            FileWriter writer = new FileWriter("C:\\Users\\Milan\\Desktop\\Fellowship\\ContactBooks\\src\\main\\resources\\contactDetails.csv");
+            String csvCollectList =  contactsArrayList.stream().map(String::valueOf).collect(Collectors.joining(","));
+            writer.write(csvCollectList);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
