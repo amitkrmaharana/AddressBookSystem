@@ -47,6 +47,22 @@ public class Contacts {
         return state;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
     public String getZip() {
         return zip;
     }

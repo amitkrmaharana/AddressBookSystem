@@ -2,16 +2,16 @@ package addressbook;
 
 
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class AddressBookMain {
     static HashMap<String,HashMap> addressBook = new HashMap<>();
@@ -244,12 +244,22 @@ public class AddressBookMain {
     }
 
     public void writeCSVFile() {
-        try {
-            FileWriter writer = new FileWriter("C:\\Users\\Milan\\Desktop\\Fellowship\\ContactBooks\\src\\main\\resources\\contactDetails.csv");
-            String csvCollectList =  contactsArrayList.stream().map(String::valueOf).collect(Collectors.joining(","));
-            writer.write(csvCollectList);
-            writer.close();
+        try (Writer writer = Files.newBufferedWriter(Paths.get("C:\\Users\\Milan\\Desktop\\Fellowship\\ContactBooks\\src\\main\\resources\\contactDetails.csv"));
+        ){
+            StatefulBeanToCsv<Contacts> beanToCsv = new StatefulBeanToCsvBuilder(writer)
+                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+                    .build();
+            List<Contacts> csvUsers = new ArrayList<>();
+            for (Contacts contact : contactsArrayList) {
+                csvUsers.add(new Contacts(contact.getFirstName(), contact.getLastName(), contact.getAddress(),
+                        contact.getCity(), contact.getState(), contact.getZip(), contact.getPhoneNumber(), contact.getEmail()));
+            }
+            beanToCsv.write(csvUsers);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CsvRequiredFieldEmptyException e) {
+            e.printStackTrace();
+        } catch (CsvDataTypeMismatchException e) {
             e.printStackTrace();
         }
     }
