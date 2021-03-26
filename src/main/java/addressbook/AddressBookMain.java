@@ -288,12 +288,12 @@ public class AddressBookMain {
     }
 
     public void readFromJsonFile() {
-        Type REVIEW_TYPE = new TypeToken<List<Contacts>>() {}.getType();
+        Type typeToken = new TypeToken<List<Contacts>>() {}.getType();
         List<Contacts> contactlist;
         try {
             Gson gson = new Gson();
             BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/contactBook.json"));
-            contactlist = gson.fromJson(reader,REVIEW_TYPE);
+            contactlist = gson.fromJson(reader,typeToken);
             contactlist.forEach(System.out::println);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
