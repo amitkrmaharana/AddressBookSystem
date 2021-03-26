@@ -1,6 +1,8 @@
 package addressbook;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.StatefulBeanToCsv;
@@ -9,6 +11,8 @@ import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -97,7 +101,8 @@ public class AddressBookMain {
         while (check) {
             System.out.println("Choose Options From the Following, Type Corresponding number" +
                     "\n1. Add New Address Book\n2. Existing Address Book\n3. Search Person Details By City or State\n4. Total Number of Contacts" +
-                    "\n5. Sort Contacts\n6. Read FileIO data\n7. Write FileIO data\n8. Read CSV File\n9. Write CSV File \n10. Exit");
+                    "\n5. Sort Contacts\n6. Read FileIO data\n7. Write FileIO data\n8. Read CSV File\n9. Write CSV File\n10. Read Json File\n" +
+                    "11. Write To Json File \n12. Exit");
             switch (consoleReader.nextInt()) {
                 case 1:
                     name = getDetails("New Address Book Name");
@@ -140,6 +145,12 @@ public class AddressBookMain {
                     writeCSVFile();
                     break;
                 case 10:
+                    readFromJsonFile();
+                    break;
+                case 11:
+                    writeToJsonFile();
+                    break;
+                case 12:
                     check = false;
                     break;
                 default:
@@ -260,6 +271,31 @@ public class AddressBookMain {
         } catch (CsvRequiredFieldEmptyException e) {
             e.printStackTrace();
         } catch (CsvDataTypeMismatchException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeToJsonFile() {
+        try {
+            Gson gson = new Gson();
+            String jsonObject = gson.toJson(contactsArrayList);
+            FileWriter writer = new FileWriter("src/main/resources/contactBook.json");
+            writer.write(jsonObject);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readFromJsonFile() {
+        Type REVIEW_TYPE = new TypeToken<List<Contacts>>() {}.getType();
+        List<Contacts> contactlist;
+        try {
+            Gson gson = new Gson();
+            BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/contactBook.json"));
+            contactlist = gson.fromJson(reader,REVIEW_TYPE);
+            contactlist.forEach(System.out::println);
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
