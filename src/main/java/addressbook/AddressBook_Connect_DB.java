@@ -30,17 +30,7 @@ public class AddressBook_Connect_DB {
         try (Connection connection = this.getConnection(jdbcURL,userNane,password)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                String address = resultSet.getString("address");
-                String city = resultSet.getString("city");
-                String state = resultSet.getString("state");
-                String zip = resultSet.getString("zip");
-                String phone = resultSet.getString("phone_number");
-                String email = resultSet.getString("email");
-                contactArrayList.add(new Contacts(firstName, lastName, address, city, state, zip, phone, email));
-            }
+            contactArrayList = getAddressBookdata(resultSet);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -56,6 +46,39 @@ public class AddressBook_Connect_DB {
             throwables.printStackTrace();
         }
         return 0;
+    }
+
+    public List<Contacts> getAddressBookdata(ResultSet resultSet) {
+        List<Contacts> contactsList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String address = resultSet.getString("address");
+                String city = resultSet.getString("city");
+                String state = resultSet.getString("state");
+                String zip = resultSet.getString("zip");
+                String phone = resultSet.getString("phone_number");
+                String email = resultSet.getString("email");
+                contactsList.add(new Contacts(firstName, lastName, address, city, state, zip, phone, email));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return contactsList;
+    }
+
+    public List<Contacts> reaadAndCountDateRangeDB(String start_date, String end_date) {
+        List<Contacts> contactList = new ArrayList<>();
+        String sql = String.format("select * from addressbook where start_date between '%s' and '%s';",Date.valueOf(start_date),Date.valueOf(end_date));
+        try(Connection connection = this.getConnection(jdbcURL,userNane,password)) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            contactList= this.getAddressBookdata(resultSet);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return contactList;
     }
 }
 

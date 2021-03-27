@@ -7,6 +7,7 @@ import java.net.CookieHandler;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 public class AddressBookTest {
     private AddressBook_Connect_DB addressBook_connect_db = new AddressBook_Connect_DB();
@@ -35,5 +36,10 @@ public class AddressBookTest {
     public void givenNewContactDetailToUpdateWithFirstName_WhenUpdated_ShouldSyncWithDB() {
         int result = addressBook_connect_db.updateContactDeatils("zip","841005","Manish");
         Assert.assertEquals(1,result);
+    }
+    @Test
+    public void givenDateRange_WhenRetrived_ShouldMatchContactListCounts() {
+        List<Contacts> contactList = addressBook_connect_db.reaadAndCountDateRangeDB("2015-01-01","2018-12-31");
+        Assert.assertEquals(1,contactList.size());
     }
 }
