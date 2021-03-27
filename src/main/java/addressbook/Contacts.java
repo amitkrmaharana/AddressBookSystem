@@ -1,6 +1,8 @@
 package addressbook;
 
 public class Contacts {
+    protected   String start_date;
+    protected   String type;
     protected String firstName;
     protected String lastName;
     protected String address;
@@ -19,6 +21,12 @@ public class Contacts {
         this.zip = zip;
         this.phoneNumber = phoneNumber;
         this.email = email;
+    }
+
+    public Contacts(String firstName, String lastName, String type, String address, String city, String state, String zip, String phoneNumber, String email, String start_date) {
+        this(firstName, lastName, address, city, state, zip, phoneNumber, email);
+        this.type = type;
+        this.start_date = start_date;
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.net.CookieHandler;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
@@ -46,5 +47,10 @@ public class AddressBookTest {
     public void givenCity_WhenRetrived_ShouldReturnCountOfContactsInCity() {
         List<Contacts> contactList =addressBook_connect_db.getContactsByCity("Jamshedpur");
         Assert.assertEquals(1,contactList.size());
+    }
+    @Test
+    public void givenNewContactDetails_WhenRetrived_ShouldReturnCountOFContacts() throws SQLException {
+        List<Contacts> contactsList = addressBook_connect_db.addNewContact("Rishin","Chakravorty","friend","s-type","Howrah","West Bengal","711103","564525651","hgfvg@jdhgt.com","2020-03-14");
+        Assert.assertEquals(3,contactsList.size());
     }
 }

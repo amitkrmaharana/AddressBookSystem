@@ -1,7 +1,5 @@
 package addressbook;
 
-import org.apache.commons.collections.functors.FalsePredicate;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +24,7 @@ public class AddressBook_Connect_DB {
 
     public List<Contacts> readData() throws SQLException {
         String sql = "select * from addressbook;";
-        List<Contacts> contactArrayList = new ArrayList<>();
-        try (Connection connection = this.getConnection(jdbcURL,userNane,password)) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            contactArrayList = getAddressBookdata(resultSet);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return contactArrayList;
+        return getContactList(sql);
     }
 
     public int updateContactDeatils(String detailName, String detail, String firstName) {
@@ -69,21 +59,16 @@ public class AddressBook_Connect_DB {
     }
 
     public List<Contacts> reaadAndCountDateRangeDB(String start_date, String end_date) {
-        List<Contacts> contactList = new ArrayList<>();
         String sql = String.format("select * from addressbook where start_date between '%s' and '%s';",Date.valueOf(start_date),Date.valueOf(end_date));
-        try(Connection connection = this.getConnection(jdbcURL,userNane,password)) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            contactList= this.getAddressBookdata(resultSet);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return contactList;
+        return getContactList(sql);
     }
 
     public List<Contacts> getContactsByCity(String cityName) {
-        List<Contacts> contactList = new ArrayList<>();
         String sql = String.format("select * from addressbook where city = '%s';",cityName);
+        return getContactList(sql);
+    }
+    public List<Contacts> getContactList(String sql) {
+        List<Contacts> contactList = new ArrayList<>();
         try(Connection connection = this.getConnection(jdbcURL,userNane,password)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -92,6 +77,18 @@ public class AddressBook_Connect_DB {
             throwables.printStackTrace();
         }
         return contactList;
+    }
+
+    public List<Contacts> addNewContact(String first_name, String last_name, String type, String address, String city, String state, String zip, String phone_number, String email, String start_date) throws SQLException {
+        String sql = String.format("insert into addressbook (first_name,last_name,type,address,city,state,zip,phone_number,email,start_date)" +
+                " values ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",first_name,last_name,type,address,city,state,zip,phone_number,email,Date.valueOf(start_date));
+        try(Connection connection = this.getConnection(jdbcURL,userNane,password)) {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return readData();
     }
 }
 
