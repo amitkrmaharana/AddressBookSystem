@@ -80,5 +80,18 @@ public class AddressBook_Connect_DB {
         }
         return contactList;
     }
+
+    public List<Contacts> getContactsByCity(String cityName) {
+        List<Contacts> contactList = new ArrayList<>();
+        String sql = String.format("select * from addressbook where city = '%s';",cityName);
+        try(Connection connection = this.getConnection(jdbcURL,userNane,password)) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            contactList = this.getAddressBookdata(resultSet);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return contactList;
+    }
 }
 

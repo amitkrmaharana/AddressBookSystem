@@ -34,12 +34,17 @@ public class AddressBookTest {
     }
     @Test
     public void givenNewContactDetailToUpdateWithFirstName_WhenUpdated_ShouldSyncWithDB() {
-        int result = addressBook_connect_db.updateContactDeatils("zip","841005","Manish");
+        int result = addressBook_connect_db.updateContactDeatils("zip","560103","Manish");
         Assert.assertEquals(1,result);
     }
     @Test
     public void givenDateRange_WhenRetrived_ShouldMatchContactListCounts() {
         List<Contacts> contactList = addressBook_connect_db.reaadAndCountDateRangeDB("2015-01-01","2018-12-31");
+        Assert.assertEquals(1,contactList.size());
+    }
+    @Test
+    public void givenCity_WhenRetrived_ShouldReturnCountOfContactsInCity() {
+        List<Contacts> contactList =addressBook_connect_db.getContactsByCity("Jamshedpur");
         Assert.assertEquals(1,contactList.size());
     }
 }
