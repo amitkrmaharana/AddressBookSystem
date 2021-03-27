@@ -46,5 +46,16 @@ public class AddressBook_Connect_DB {
         }
         return contactArrayList;
     }
+
+    public int updateContactDeatils(String detailName, String detail, String firstName) {
+        String sql = String.format("update addressbook set %s = '%s' where first_name = '%s';",detailName,detail,firstName);
+        try(Connection connection = this.getConnection(jdbcURL,userNane,password)) {
+            Statement statement = connection.createStatement();
+            return statement.executeUpdate(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return 0;
+    }
 }
 

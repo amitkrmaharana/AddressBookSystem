@@ -31,4 +31,9 @@ public class AddressBookTest {
     public void  givenAddressBookDB_WhenRetrieved_ShouldMatchContactsCount() throws SQLException {
         Assert.assertEquals(2,addressBook_connect_db.readData().size());
     }
+    @Test
+    public void givenNewContactDetailToUpdateWithFirstName_WhenUpdated_ShouldSyncWithDB() {
+        int result = addressBook_connect_db.updateContactDeatils("zip","841005","Manish");
+        Assert.assertEquals(1,result);
+    }
 }
