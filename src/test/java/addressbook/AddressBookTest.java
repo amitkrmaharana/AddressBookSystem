@@ -2,12 +2,12 @@ package addressbook;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.net.CookieHandler;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 public class AddressBookTest {
@@ -52,5 +52,20 @@ public class AddressBookTest {
     public void givenNewContactDetails_WhenRetrived_ShouldReturnCountOFContacts() throws SQLException {
         List<Contacts> contactsList = addressBook_connect_db.addNewContact("Rishin","Chakravorty","friend","s-type","Howrah","West Bengal","711103","564525651","hgfvg@jdhgt.com","2020-03-14");
         Assert.assertEquals(3,contactsList.size());
+    }
+    @Test
+    public void givenNewContactDetails_WhenAdded_ShouldreturnEntriesUsingThread() {
+        Contacts[] contactsArray = {
+                new Contacts("Tom","Singhania","friend","p-type","Cuttack","Odisha","654258","8542578","hgfr@hgfb.com", "2021-03-05"),
+                new Contacts("Jerry","Malhotra","friend","k-type","Bokaro","Jharkhand","658952","6658369","hgtd@jhg.com","2021-03-17"),
+                new Contacts("Kajal","Mesharam","friend","k-type","Jamshedpur","Jharakhand","831004","65289456","ksju@jhy.com","2021-03-27"),
+                new Contacts("Ravi","Kumar","family","p-type","Pune","Maharashtra","521669","6548552","ravi@gamjh.com","2021-03-28")
+                };
+        Instant start = Instant.now();
+        addressBook_connect_db.addNewContactWithThreads(Arrays.asList(contactsArray));
+        Instant end = Instant.now();
+        System.out.println("Duration of the thread running is: " + Duration.between(start,end));
+        List<Contacts> contactsList = addressBook_connect_db.readData();
+        Assert.assertEquals(7,contactsList.size());
     }
 }

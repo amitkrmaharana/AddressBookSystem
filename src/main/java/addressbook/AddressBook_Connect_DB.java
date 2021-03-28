@@ -2,7 +2,9 @@ package addressbook;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddressBook_Connect_DB {
 
@@ -10,10 +12,15 @@ public class AddressBook_Connect_DB {
     String userNane = "root";
     String password = "robowars@1amit";
 
-    protected Connection getConnection(String url, String userNane, String password) throws SQLException {
+    protected Connection getConnection(String url, String userNane, String password){
         Connection connection;
-        connection = DriverManager.getConnection(url,userNane,password);
-        return connection;
+        try {
+            connection = DriverManager.getConnection(url,userNane,password);
+            return connection;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 
     public boolean isDBConnected(Connection connection) throws SQLException {
@@ -22,7 +29,7 @@ public class AddressBook_Connect_DB {
         return false;
     }
 
-    public List<Contacts> readData() throws SQLException {
+    public List<Contacts> readData() {
         String sql = "select * from addressbook;";
         return getContactList(sql);
     }
@@ -79,7 +86,7 @@ public class AddressBook_Connect_DB {
         return contactList;
     }
 
-    public List<Contacts> addNewContact(String first_name, String last_name, String type, String address, String city, String state, String zip, String phone_number, String email, String start_date) throws SQLException {
+    public List<Contacts> addNewContact(String first_name, String last_name, String type, String address, String city, String state, String zip, String phone_number, String email, String start_date) {
         String sql = String.format("insert into addressbook (first_name,last_name,type,address,city,state,zip,phone_number,email,start_date)" +
                 " values ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",first_name,last_name,type,address,city,state,zip,phone_number,email,Date.valueOf(start_date));
         try(Connection connection = this.getConnection(jdbcURL,userNane,password)) {
@@ -89,6 +96,29 @@ public class AddressBook_Connect_DB {
             throwables.printStackTrace();
         }
         return readData();
+    }
+
+    public void addNewContactWithThreads(List<Contacts> contactList) {
+        Map<Integer,Boolean> contactDetailsAdditionStatus  = new HashMap<>();
+        for (Contacts contacts : contactList) {
+            Runnable task = () -> {
+              contactDetailsAdditionStatus.put(contacts.hashCode(),false);
+              System.out.println("Contact being added: " + Thread.currentThread().getName());
+              List<Contacts> contactsList = addNewContact(contacts.firstName, contacts.lastName, contacts.type, contacts.address, contacts.city, contacts.state, contacts.zip, contacts.phoneNumber, contacts.email, contacts.start_date);
+              contactDetailsAdditionStatus.put(contacts.hashCode(),true);
+              System.out.println("Contact Added: " + Thread.currentThread().getName());
+            };
+            //Threads implemented here
+            Thread thread = new Thread(task,contacts.getFirstName());
+            thread.start();
+        }
+        while (contactDetailsAdditionStatus.containsValue(false)) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

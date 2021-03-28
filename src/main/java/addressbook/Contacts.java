@@ -1,8 +1,11 @@
 package addressbook;
 
+import java.util.Date;
+import java.util.Objects;
+
 public class Contacts {
-    protected   String start_date;
-    protected   String type;
+    protected String start_date;
+    protected String type;
     protected String firstName;
     protected String lastName;
     protected String address;
@@ -27,6 +30,19 @@ public class Contacts {
         this(firstName, lastName, address, city, state, zip, phoneNumber, email);
         this.type = type;
         this.start_date = start_date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contacts contacts = (Contacts) o;
+        return Objects.equals(start_date, contacts.start_date) && Objects.equals(type, contacts.type) && Objects.equals(firstName, contacts.firstName) && Objects.equals(lastName, contacts.lastName) && Objects.equals(address, contacts.address) && Objects.equals(city, contacts.city) && Objects.equals(state, contacts.state) && Objects.equals(zip, contacts.zip) && Objects.equals(phoneNumber, contacts.phoneNumber) && Objects.equals(email, contacts.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, type, address, city, state, zip, phoneNumber, email, start_date);
     }
 
     @Override
