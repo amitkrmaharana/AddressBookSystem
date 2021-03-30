@@ -104,6 +104,34 @@ public class AddressBookTest {
         Assert.assertEquals(7,contactsList.size());
     }
 
+    @Test
+    public void givenDetailToUpdate_WhenUpdated_ShouldMatchResponse() {
+        int id = 2;
+        List<Contacts> contactsList = getContactList();
+        updateZipToJson("Tom","25326",contactsList);
+        Contacts contacts = getContact("Tom",contactsList);
+
+        String contactJson = new Gson().toJson(contacts);
+        RequestSpecification requestSpecification = RestAssured.given();
+        requestSpecification.header("Content-Type","application/json");
+        requestSpecification.body(contactJson);
+        Response response = requestSpecification.put("/contacts/"+id);
+        Assert.assertEquals(200,response.getStatusCode());
+    }
+
+    public void updateZipToJson(String firstName, String zip, List<Contacts> contactsList) {
+        Contacts contacts = getContact(firstName,contactsList);
+        if (contacts != null) contacts.setZip(zip);
+    }
+
+    private Contacts getContact(String firstName, List<Contacts> contactsList) {
+        return contactsList.stream()
+                .filter(contactDetails -> contactDetails.firstName.equals(firstName))
+                .findFirst()
+                .orElse(null);
+    }
+
+
     private Response addContactToServer(Contacts contacts) {
         String contactJson = new Gson().toJson(contacts);
         RequestSpecification requestSpecification = RestAssured.given();
@@ -117,5 +145,4 @@ public class AddressBookTest {
         List<Contacts> contactsList = new Gson().fromJson(response.asString(),new TypeToken<List<Contacts>>(){}.getType());
         return contactsList;
     }
-
 }
