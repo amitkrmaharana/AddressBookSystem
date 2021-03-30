@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,6 +86,30 @@ public class AddressBookTest {
     public void givenContactdataInJsonServer_Whenretrived_ShouldMatchCount() {
         List<Contacts> contactsList = getContactList();
         Assert.assertEquals(2,contactsList.size());
+    }
+
+    @Test
+    public void givenNewContactdetails_WhenAdded_ShouldMatchResponseAndCount() {
+        Contacts[] contactsArray = {
+                new Contacts(0,"Akshay","Singhania","friend","p-type","Cuttack","Odisha","654258","8542578","hgfr@hgfb.com", "2021-03-05"),
+                new Contacts(0,"Jerry","Malhotra","friend","k-type","Bokaro","Jharkhand","658952","6658369","hgtd@jhg.com","2021-03-17"),
+                new Contacts(0,"Kajal","Mesharam","friend","k-type","Jamshedpur","Jharakhand","831004","65289456","ksju@jhy.com","2021-03-27"),
+                new Contacts(0,"Ravi","Kumar","family","p-type","Pune","Maharashtra","521669","6548552","ravi@gamjh.com","2021-03-28")
+        };
+        for (Contacts contacts : contactsArray){
+            Response response = addContactToServer(contacts);
+            Assert.assertEquals(201,response.getStatusCode());
+        }
+        List<Contacts> contactsList = getContactList();
+        Assert.assertEquals(7,contactsList.size());
+    }
+
+    private Response addContactToServer(Contacts contacts) {
+        String contactJson = new Gson().toJson(contacts);
+        RequestSpecification requestSpecification = RestAssured.given();
+        requestSpecification.header("Content-Type", "application/json");
+        requestSpecification.body(contactJson);
+        return requestSpecification.post("/contacts");
     }
 
     private List<Contacts> getContactList() {

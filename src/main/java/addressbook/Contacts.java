@@ -14,6 +14,7 @@ public class Contacts {
     protected String zip;
     protected String phoneNumber;
     protected String email;
+    public int id;
 
     public Contacts(String firstName, String lastName, String address, String city, String state, String zip, String phoneNumber, String email) {
         this.firstName = firstName;
@@ -30,6 +31,11 @@ public class Contacts {
         this(firstName, lastName, address, city, state, zip, phoneNumber, email);
         this.type = type;
         this.start_date = start_date;
+    }
+
+    public Contacts(int id, String firstName, String lastName, String type, String address, String city, String state, String zip, String phoneNumber, String email, String start_date) {
+        this(firstName, lastName, type, address, city, state, zip, phoneNumber, email, start_date);
+        this.id = id;
     }
 
     @Override

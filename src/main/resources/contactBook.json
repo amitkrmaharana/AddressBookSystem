@@ -33,6 +33,71 @@
         "month": 3,
         "day": 1
       }
+    },
+    {
+      "start_date": "2021-03-05",
+      "type": "friend",
+      "firstName": "Tom",
+      "lastName": "Singhania",
+      "address": "p-type",
+      "city": "Cuttack",
+      "state": "Odisha",
+      "zip": "654258",
+      "phoneNumber": "8542578",
+      "email": "hgfr@hgfb.com",
+      "id": 2
+    },
+    {
+      "start_date": "2021-03-05",
+      "type": "friend",
+      "firstName": "Akshay",
+      "lastName": "Singhania",
+      "address": "p-type",
+      "city": "Cuttack",
+      "state": "Odisha",
+      "zip": "654258",
+      "phoneNumber": "8542578",
+      "email": "hgfr@hgfb.com",
+      "id": 3
+    },
+    {
+      "start_date": "2021-03-17",
+      "type": "friend",
+      "firstName": "Jerry",
+      "lastName": "Malhotra",
+      "address": "k-type",
+      "city": "Bokaro",
+      "state": "Jharkhand",
+      "zip": "658952",
+      "phoneNumber": "6658369",
+      "email": "hgtd@jhg.com",
+      "id": 4
+    },
+    {
+      "start_date": "2021-03-27",
+      "type": "friend",
+      "firstName": "Kajal",
+      "lastName": "Mesharam",
+      "address": "k-type",
+      "city": "Jamshedpur",
+      "state": "Jharakhand",
+      "zip": "831004",
+      "phoneNumber": "65289456",
+      "email": "ksju@jhy.com",
+      "id": 5
+    },
+    {
+      "start_date": "2021-03-28",
+      "type": "family",
+      "firstName": "Ravi",
+      "lastName": "Kumar",
+      "address": "p-type",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "zip": "521669",
+      "phoneNumber": "6548552",
+      "email": "ravi@gamjh.com",
+      "id": 6
     }
   ]
 }
