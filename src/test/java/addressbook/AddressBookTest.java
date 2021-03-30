@@ -1,13 +1,20 @@
 package addressbook;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AddressBookTest {
@@ -68,4 +75,22 @@ public class AddressBookTest {
         List<Contacts> contactsList = addressBook_connect_db.readData();
         Assert.assertEquals(7,contactsList.size());
     }
+
+    @Before
+    public void setup() {
+        RestAssured.baseURI = "http://localhost/";
+        RestAssured.port = 3000;
+    }
+    @Test
+    public void givenContactdataInJsonServer_Whenretrived_ShouldMatchCount() {
+        List<Contacts> contactsList = getContactList();
+        Assert.assertEquals(2,contactsList.size());
+    }
+
+    private List<Contacts> getContactList() {
+        Response response = RestAssured.get("/contacts");
+        List<Contacts> contactsList = new Gson().fromJson(response.asString(),new TypeToken<List<Contacts>>(){}.getType());
+        return contactsList;
+    }
+
 }

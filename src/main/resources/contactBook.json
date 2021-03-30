@@ -1,1 +1,38 @@
-[{"firstName":"ksjdlkjsf","lastName":"sldkjfjsf","address":"lkdsfjsdf","city":"lsjdfsjf","state":"slkdjflksjdf","zip":"s;ldf;lsk;f","phoneNumber":"slkdfjl;djsfsd","email":"lksdfjlsdf"}]
+{
+  "contacts": [
+    {
+      "id": 1,
+      "firstName": "Amit",
+      "lastName": "Kumar",
+      "type": "family",
+      "address": "p-type",
+      "city": "Jamshedpur",
+      "state": "Jharkhand",
+      "zip": 831004,
+      "phone_number": "25412365",
+      "email": "akjhh@hgd.com",
+      "start": {
+        "year": 2017,
+        "month": 11,
+        "day": 1
+      }
+    },
+    {
+      "id": 1,
+      "firstName": "Manish",
+      "lastName": "Singh",
+      "type": "friend",
+      "address": "k-type",
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "zip": 831504,
+      "phone_number": "25442565",
+      "email": "jhdbnd@kmjg.com",
+      "start": {
+        "year": 2018,
+        "month": 3,
+        "day": 1
+      }
+    }
+  ]
+}
