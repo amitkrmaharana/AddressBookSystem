@@ -37,19 +37,6 @@
     {
       "start_date": "2021-03-05",
       "type": "friend",
-      "firstName": "Tom",
-      "lastName": "Singhania",
-      "address": "p-type",
-      "city": "Cuttack",
-      "state": "Odisha",
-      "zip": "25326",
-      "phoneNumber": "8542578",
-      "email": "hgfr@hgfb.com",
-      "id": 2
-    },
-    {
-      "start_date": "2021-03-05",
-      "type": "friend",
       "firstName": "Akshay",
       "lastName": "Singhania",
       "address": "p-type",

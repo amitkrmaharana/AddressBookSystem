@@ -119,6 +119,22 @@ public class AddressBookTest {
         Assert.assertEquals(200,response.getStatusCode());
     }
 
+    @Test
+    public void givenContactFirstName_WhenDeleted_ShouldMatchResponseAndCount() {
+        int id = 2;
+        List<Contacts> contactsList = getContactList();
+        Contacts contacts = getContact("Tom",contactsList);
+
+        String contactJson = new Gson().toJson(contacts);
+        RequestSpecification requestSpecification = RestAssured.given();
+        requestSpecification.header("Content-Type","application/json");
+        requestSpecification.body(contactJson);
+        Response response = requestSpecification.delete("/contacts/"+id);
+        Assert.assertEquals(200,response.getStatusCode());
+
+        Assert.assertEquals(6,getContactList().size());
+    }
+
     public void updateZipToJson(String firstName, String zip, List<Contacts> contactsList) {
         Contacts contacts = getContact(firstName,contactsList);
         if (contacts != null) contacts.setZip(zip);
